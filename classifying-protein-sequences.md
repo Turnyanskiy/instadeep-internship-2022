@@ -28,9 +28,9 @@ A couple of data pre-processing is implented before used in the model. Firstly, 
 model and inputted into the embedding layer. This is achieved through a simple dictionary map:
 ```py
 # Encoding tokens to a unique number
-def get_seq_column_map(X):
+def get_seq_column_map(x):
     unique = set()
-    for idx, sequence in enumerate(X[0]):
+    for idx, sequence in enumerate(x[0]):
         unique.update(list(sequence))
     
     return dict(zip(unique, list(range(len(unique)))))
@@ -45,11 +45,14 @@ have the same length. A simple collate function is used:
 def collate_padd(batch):
         x = [row[0] for row in batch]
         y = [row[1] for row in batch]
-        
         sequence_len = [len(row) for row in x]
+        
         x =  pad_sequence(x, batch_first=True)
+        
         return (torch.as_tensor(x), torch.as_tensor(sequence_len)), torch.as_tensor(y)
 ```
+
+Lastly, it is important to mention the data is split ~80% Training, ~10% Validation and ~10% Testing. These are arbitrary numbers and chosen for no particular reason.
 
 ##### Overview of LSTM 
 
