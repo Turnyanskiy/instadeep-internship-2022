@@ -116,7 +116,7 @@ Net(
   (classifier): Linear(in_features=512, out_features=1, bias=True)
 )
 ```
-***NOTE: TALK ABOUT POSITIONAL ENCODING ACTIONS***
+A vital part of the BERT transformer is the positional encoding layer. It is added to the model before the ecoder explicity to retain information regarding the order of words in a sentance. 
 
 ***NOTE: TALK ABOUT TRANSFORMER ENCODER ACTIONS***
 
