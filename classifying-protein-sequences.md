@@ -63,7 +63,7 @@ Where h<sub>t</sub> is the hidden state at time t, c<sub>t</sub> is the cell sta
 
 ![LSTM architecture](https://miro.medium.com/max/1400/1*ahafyNt0Ph_J6Ed9_2hvdg.png)
 
-It is important to note that before the sequence is put into the LSTM, it is packed. 
+It is also important to note that before the sequence is put into the LSTM, it is packed. This is done because of the large variation between length of input sequences resulting in certain sequences having large amounts of padding. Packing the sequence reduces the amount of computing required significantly, since we remove all the pad tokens and therefore no longer have to process them.
 
 ```py
 packed_input = pack_padded_sequence(embed, sequence_len, batch_first=True, enforce_sorted=False)
@@ -73,7 +73,7 @@ output, _ = pad_packed_sequence(lstm_1_seq, batch_first=True)
 
 ##### Overview of BERT Transformer
 
-The BERT model is like the LSTM is at its core relatively simple. It contains a ```torch.nn.Embedding``` layer to store the sequences,()
+The BERT model is like the LSTM is at its core relatively simple. It contains a ```torch.nn.Embedding``` layer to store the sequences, before a ```PositionalEncoding``` layer to describe location which is followed by 6 layers of ```torch.nn.TransformerEncoderLayer```. There are no decoder since this model is a BERT Transformer. Lastly, a linear layer.
 ```
 Net(
   (embed): Embedding(24, 512)
@@ -158,8 +158,21 @@ self.transformer_encoder = nn.TransformerEncoder(
 )
 ```
 
+The entire multi-headed attetnion section of the model can be visualised well using this diagmram:
+![Transformer Multi-Headed Attention](https://production-media.paperswithcode.com/methods/multi-head-attention_l1A3G7a.png)
+
 ##### Overview of Classifier trained on ProtBert embedding
 
+The classifier trained on ProtBert embedding is a very intresting model since it shows the power of transfer learning. The model is incredibly basic. Only consisting of two linear layers, with an actiavtion function inbetween, and a sofmax function at the end.
+
+```
+Net(
+  (linear1): Linear(in_features=1024, out_features=2, bias=True)
+  (activation): ReLU()
+  (linear2): Linear(in_features=2, out_features=1, bias=True)
+  (softmax): Softmax(dim=1)
+)
+```
 
 ## Results
 
@@ -167,4 +180,4 @@ self.transformer_encoder = nn.TransformerEncoder(
 
 ## Discussion and conclusions
 
-***NOTE: COMPARE ADVANTAGES AND DISADVANTAGES OF LSTMS AND TRANSFORMERS, ALSO EMBEDDINGS**
+The differant approches to solving this challenging issue shows the power of transformers and the clear drawbacks of LSTMs (and all RNNs). This can be noted in both the speed and the accuracy of the models, especially for this task which requires the classification of sometimes very long sequences.
