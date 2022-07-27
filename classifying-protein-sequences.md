@@ -163,7 +163,7 @@ The entire multi-headed attetnion section of the model can be visualised well us
 
 ##### Overview of Classifier trained on ProtBert embedding
 
-The classifier trained on ProtBert embedding is a very intresting model since it shows the power of transfer learning. The model is incredibly basic. Only consisting of two linear layers, with an actiavtion function inbetween, and a sofmax function at the end.
+The classifier trained on ProtBert embedding is a very intresting model since it shows the power of transfer learning. The model is incredibly basic, only consisting of two linear layers, with an actiavtion function inbetween, and a sofmax function at the end.
 
 ```
 Net(
@@ -173,11 +173,25 @@ Net(
   (softmax): Softmax(dim=1)
 )
 ```
+The model is trained on an embedding rather than the data defined earlier (and used to train the LSTM and BERT Transformer). This embedding is calculated using ProtBert model. The protbert model is a more refined and complex version of the BERT Transformer used in this work. The emebdding is 1024 with a dimension of thousand and twentyfour, hence the ```in_features=1024``` in the input layer.
 
 ## Results
 
-***NOTE: SHOW RESULTS**
+The results between each different model varied. Each model had a different accuracy and training time despite using the same data.
+
+| Model              | Accuracy      | Train time / epoch / seconds |
+| -------------------|:-------------:| ----------------------------:|
+| LSTM               |         0.897 |                          <10 |
+| BERT Transformer   |         0.    |                              |
+| ProtBert Embedding |         0.949 |                         >400 |
+
 
 ## Discussion and conclusions
 
 The differant approches to solving this challenging issue shows the power of transformers and the clear drawbacks of LSTMs (and all RNNs). This can be noted in both the speed and the accuracy of the models, especially for this task which requires the classification of sometimes very long sequences.
+
+The LSTM proved to be least effective in classifying the sequence, this is due to the well-known drawbacks of LSTMs. Firstly, LSTMs, although solving the problem of vanishing gradients partialy, fail to remove the problem completley. The data still has to move from cell to cell for its evealutation. In addition to this, LSTMs vunrable from overfitting although this problem is demped by the dropout layers. In addition to this, the LSTM proved to be the most time consuming to train, this is obviosuly from the seequential computation in the LSTM layer, as the LSTM has to calculate the hideen layers interatively, having to weight for the hidden state at time t-1 to calculate the hidden state at time t.
+
+The BERT Transformer
+
+The basic classifier trained on ProtBert embedding was unsuprisingly by far the most effective.
