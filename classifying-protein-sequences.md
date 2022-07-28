@@ -188,10 +188,10 @@ The results between each different model varied. Each model had a different accu
 
 ## Discussion and conclusions
 
-The differant approches to solving this challenging issue shows the power of transformers and the clear drawbacks of LSTMs (and all RNNs). This can be noted in both the speed and the accuracy of the models, especially for this task which requires the classification of sometimes very long sequences.
+The different approches to solving this challenging issue shows the power of transformers and the clear drawbacks of LSTMs (and all RNNs). This can be noted in both the speed and the accuracy of the models, especially for this task which requires the classification of sometimes very long sequences.
 
 The LSTM proved to be least effective in classifying the sequence, this is due to the well-known drawbacks of LSTMs. Firstly, LSTMs, although solving the problem of vanishing gradients partialy, fail to remove the problem completley. The data still has to move from cell to cell for its evealutation. In addition to this, LSTMs vunrable from overfitting although this problem is demped by the dropout layers. In addition to this, the LSTM proved to be the most time consuming to train, this is obviosuly from the seequential computation in the LSTM layer, as the LSTM has to calculate the hideen layers interatively, having to weight for the hidden state at time t-1 to calculate the hidden state at time t.
 
 The BERT Transformer
 
-The basic classifier trained on ProtBert embedding was unsuprisingly by far the most effective.
+The basic classifier trained on ProtBert embedding was unsuprisingly by far the most effective. ProtBert's model is trained on a far larger dataset which gives it some advantage, however, more importantly the actual model itself is well disigned for this classifcation task designed by RostLab. The true power of transfer learning is on display in this model. With it scoring the higehst accuracy and fastest training time.
