@@ -2,9 +2,9 @@
 
 ## Introduction
 
-Proteins are important biomolecules comprised of amino acids joined together by peptide bonds. They are paramount to nearly all of life's processes and are it is fundamental to be able to correctly and accurately identify proteins in a step to understand function and ecology of them. This has become especially more and more present since the arrival of COVID-19 and will forever remain present as evidenced by the monkeypox outbreak in May 2022.
+Proteins are important biomolecules comprised of amino acids joined together by peptide bonds. They are paramount to nearly all of life's processes and  it is fundamental to be able to correctly and accurately identify proteins in a step to understand function and ecology of them. This has become especially more and more present since the arrival of COVID-19 and will forever remain present as evidenced by the monkeypox outbreak in May 2022.
 
-Machine Learning (ML) has become very relevant in humanities pursuit to achieve this knowledge. A variety of ML algorithms have been applied to the problem with varying success. Most notable being Transformers, and perhaps LSTMs (Long short-term memory). 
+Machine Learning (ML) has become very relevant in humanity's pursuit to achieve this knowledge. A variety of ML algorithms have been applied to the problem with varying success. Most notable being Transformers, and perhaps LSTMs (Long short-term memory). 
 
 This work attempts to compare these two methods. Three different points of comparison are used, all implemented in PyTorch: LSTM, BERT Transformer, and a simple feedforward network trained on an embedding produced by ProtBert (another BERT transformer). These are all tested on the "Human vs Pathogen" dataset curated by DeepChain.
 
@@ -15,7 +15,7 @@ In this work, all models were assessed on a single dataset, "Human vs Pathogen" 
 
 The three models were trained on the "sequence" column of the dataset which contains one-dimensional (1D) sequences, built from twenty-four tokens (Letters), with twenty each representing an amino acid, and the last four representing a ```[mask]```  mask token, a ```[pad]``` padding token, a ```[CLS]``` classifier token, and a ```[SEP]``` separator token. 
 
-A couple of data pre-processing is implemented before used in the model. Firstly, each token is encoded to a unique number so it is able to be used in the model and inputted into the embedding layer. This is achieved through a simple dictionary map:
+A couple of data pre-processing is implemented before being used in the model. Firstly, each token is encoded to a unique number so it is able to be used in the model and inputted into the embedding layer. This is achieved through a simple dictionary map:
 ```py
 # Encoding tokens to a unique number
 def get_seq_column_map(x):
@@ -41,7 +41,7 @@ def collate_padd(batch):
         return (torch.as_tensor(x), torch.as_tensor(sequence_len)), torch.as_tensor(y)
 ```
 
-Lastly, it is important to mention the data is split ~80% Training, ~10% Validation and ~10% Testing. These are arbitrary numbers and chosen for no particular reason.
+Lastly, it is important to mention the data is split ~80% Training, ~10% Validation and ~10% Testing. These are arbitrary numbers and were chosen for no particular reason.
 
 ##### Overview of LSTM 
 
@@ -63,7 +63,7 @@ Where h<sub>t</sub> is the hidden state at time t, c<sub>t</sub> is the cell sta
 
 ![LSTM architecture](https://miro.medium.com/max/1400/1*ahafyNt0Ph_J6Ed9_2hvdg.png)
 
-It is also important to note that before the sequence is put into the LSTM, it is packed. This is done because of the large variation between length of input sequences resulting in certain sequences having large amounts of padding. Packing the sequence reduces the amount of computing required significantly, since we remove all the pad tokens and therefore no longer have to process them.
+It is also important to note that before the sequence is put into the LSTM, it is packed. This is done because of the large variation between the length of input sequences resulting in certain sequences having large amounts of padding. Packing the sequence reduces the amount of computing required significantly since we remove all the pad tokens and therefore no longer have to process them.
 
 ```py
 packed_input = pack_padded_sequence(embed, sequence_len, batch_first=True, enforce_sorted=False)
@@ -73,7 +73,7 @@ output, _ = pad_packed_sequence(lstm_1_seq, batch_first=True)
 
 ##### Overview of BERT Transformer
 
-The BERT model is like the LSTM is at its core relatively simple. It contains a ```torch.nn.Embedding``` layer to store the sequences, before a ```PositionalEncoding``` layer to describe location which is followed by 6 layers of ```torch.nn.TransformerEncoderLayer```. There are no decoder since this model is a BERT Transformer. Lastly, a linear layer.
+The BERT model is like the LSTM is at its core relatively simple. It contains a ```torch.nn.Embedding``` layer to store the sequences, before a ```PositionalEncoding``` layer to describe location which is followed by 6 layers of ```torch.nn.TransformerEncoderLayer```. There is no decoder since this model is a BERT Transformer. Lastly, this is all followed a fully connected layer.
 ```
 Net(
   (embed): Embedding(24, 512)
@@ -115,7 +115,7 @@ Net(
   (classifier): Linear(in_features=512, out_features=1, bias=True)
 )
 ```
-A vital part of the BERT transformer is the positional encoding layer. It is added to the model before the encoder explicity to retain information regarding the order of amino acids in a sequence. It works by desribing the location of an token in a sequence so that each position is assigned a unique representation. Each position is mapped to a vector and therefore the ouput of the positional encoding layer is a matrix, where each row represents an encoded object of the sequence.
+A vital part of the BERT transformer is the positional encoding layer. It is added to the model before the encoder explicity to retain information regarding the order of amino acids in a sequence. It works by describing the location of a token in a sequence so that each position is assigned a unique representation. Each position is mapped to a vector and therefore the ouput of the positional encoding layer is a matrix, where each row represents an encoded object of the sequence.
 
 The Positional encoder simply follows a relatively simple equation.
 
@@ -143,7 +143,7 @@ class PositionalEncoding(nn.Module):
         return self.dropout(x)
 ```
 
-After ```PositionalEncoding``` module injects some information about the position of the tokens in the sequence, it is followed by six encoder layers. Each layer has 8 heads, performing multi headed attention. This means the attention module repeats its computations multiple times in parellel. The attention module achieves this by spliting its Query, Key and Value parameters N-ways and passes each split independently through each head. This is all done with the ```torch.nn.TransformerEncoder```.
+After ```PositionalEncoding``` module injects some information about the position of the tokens in the sequence, it is followed by six encoder layers. Each layer has 8 heads, performing multi-headed attention. This means the attention module repeats its computations multiple times in parellel. The attention module achieves this by spliting its Query, Key and Value parameters N-ways and passes each split independently through each head. This is all done with the ```torch.nn.TransformerEncoder```.
 
 ```py
 encoder_layer = nn.TransformerEncoderLayer(
@@ -163,7 +163,7 @@ The entire multi-headed attetnion section of the model can be visualised well us
 
 ##### Overview of Classifier trained on ProtBert embedding
 
-The classifier trained on ProtBert embedding is a very intresting model since it shows the power of transfer learning. The model is incredibly basic, only consisting of two linear layers, with an actiavtion function inbetween, and a sofmax function at the end.
+The classifier trained on ProtBert embedding is a very interesting model since it shows the power of transfer learning. The model is incredibly basic, only consisting of two linear layers, with an activation function in between, and a softmax function at the end.
 
 ```
 Net(
@@ -188,10 +188,10 @@ The results between each different model varied. Each model had a different accu
 
 ## Discussion and conclusions
 
-The different approches to solving this challenging issue shows the power of transformers and the clear drawbacks of LSTMs (and all RNNs). This can be noted in both the speed and the accuracy of the models, especially for this task which requires the classification of sometimes very long sequences.
+The different approaches to solving this challenging issue show the power of transformers and the clear drawbacks of LSTMs (and all RNNs). This can be noted in both the speed and the accuracy of the models, especially for this task which requires the classification of sometimes very long sequences.
 
-The LSTM proved to be least effective in classifying the sequence, this is due to the well-known drawbacks of LSTMs. Firstly, LSTMs, although solving the problem of vanishing gradients partialy, fail to remove the problem completley. The data still has to move from cell to cell for its evealutation. In addition to this, LSTMs vunrable from overfitting although this problem is demped by the dropout layers. In addition to this, the LSTM proved to be the most time consuming to train, this is obviosuly from the seequential computation in the LSTM layer, as the LSTM has to calculate the hideen layers interatively, having to weight for the hidden state at time t-1 to calculate the hidden state at time t.
+The LSTM proved to be the least effective in classifying the sequence, this is due to the well-known drawbacks of LSTMs. Firstly, LSTMs, although solving the problem of vanishing gradients partially, fail to remove the problem completely. The data still has to move from cell to cell for its evealutation. In addition to this, LSTMs are vulnerable to overfitting although this problem is dampened by the dropout layers. In addition to this, the LSTM proved to be the most time-consuming to train, this is obviously from the sequential computation in the LSTM layer, as the LSTM has to calculate the hidden layers iteratively, having to weight for the hidden state at time t-1 to calculate the hidden state at time t.
 
 The BERT Transformer
 
-The basic classifier trained on ProtBert embedding was unsuprisingly by far the most effective. ProtBert's model is trained on a far larger dataset which gives it some advantage, however, more importantly the actual model itself is well disigned for this classifcation task designed by RostLab. The true power of transfer learning is on display in this model. With it scoring the higehst accuracy and fastest training time.
+The basic classifier trained on ProtBert embedding was unsuprisingly by far the most effective. ProtBert's model is trained on a far larger dataset which gives it some advantage, however, more importantly, the actual model itself is well designed for this classification task designed by RostLab. The true power of transfer learning is on display in this model. With it scoring the highest accuracy and fastest training time.
