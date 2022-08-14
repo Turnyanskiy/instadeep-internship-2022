@@ -1,5 +1,3 @@
-# WORK IN PROGRESS
-
 ## Introduction
 
 Proteins are important biomolecules comprised of amino acids joined together by peptide bonds. They are paramount to nearly all of life's processes and  it is fundamental to be able to correctly and accurately identify proteins in a step to understand function and ecology of them. This has become especially more and more present since the arrival of COVID-19 and will forever remain present as evidenced by the monkeypox outbreak in May 2022.
